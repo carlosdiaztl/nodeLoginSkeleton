@@ -1,6 +1,7 @@
 const express = require('express');
 const authController = require('./controllers/authController');
 const verifyToken = require('./middleware/verifyToken'); // Importar el middleware
+const db = require('./db'); // Importar la conexión a la base de datos
 require('dotenv').config();
 
 const app = express();
@@ -15,9 +16,16 @@ app.post('/api/login', authController.login);
 
 app.get('/api/users', authController.getAllUsers);
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+app.get('/', async (req, res) => {
+    try {
+      // Realizar una consulta simple a la base de datos
+      const result = await db.query('SELECT NOW()');  // Consultar la hora actual en PostgreSQL
+      res.send(`Conexión exitosa a la base de datos PostgreSQL. Hora actual: ${result.rows[0].now}`);
+    } catch (error) {
+      console.error('Error al conectarse a la base de datos:', error);
+      res.status(500).send('Error al conectarse a la base de datos');
+    }
+  });
 
 // Ruta protegida: solo se accede si el token es válido
 app.get('/api/protected', verifyToken, (req, res) => {
