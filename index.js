@@ -16,6 +16,19 @@ app.post('/api/login', authController.login);
 
 app.get('/api/users', authController.getAllUsers);
 
+app.get('/env', (req, res) => {
+    res.send(`
+      <h1>Variables de Entorno</h1>
+      <ul>
+        <li>POSTGRES_USER: ${process.env.POSTGRES_USER}</li>
+        <li>POSTGRES_HOST: ${process.env.POSTGRES_HOST}</li>
+        <li>POSTGRES_DATABASE: ${process.env.POSTGRES_DATABASE}</li>
+        <li>POSTGRES_PASSWORD: ${process.env.POSTGRES_PASSWORD}</li>
+        <li>POSTGRES_PORT: ${process.env.POSTGRES_PORT}</li>
+        <li>JWT_SECRET: ${process.env.JWT_SECRET}</li>
+      </ul>
+    `);
+  });
 app.get('/', async (req, res) => {
     try {
       // Realizar una consulta simple a la base de datos
