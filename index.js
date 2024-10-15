@@ -24,7 +24,7 @@ app.get('/env', (req, res) => {
         <li>POSTGRES_HOST: ${process.env.POSTGRES_HOST}</li>
         <li>POSTGRES_DATABASE: ${process.env.POSTGRES_DATABASE}</li>
         <li>POSTGRES_PASSWORD: ${process.env.POSTGRES_PASSWORD}</li>
-        <li>POSTGRES_PORT: ${process.env.POSTGRES_PORT}</li>
+        <li>DATABASE_URL: ${process.env.DATABASE_URL}</li>
         <li>JWT_SECRET: ${process.env.JWT_SECRET}</li>
       </ul>
     `);
