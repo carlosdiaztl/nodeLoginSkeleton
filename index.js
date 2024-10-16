@@ -5,6 +5,14 @@ const db = require('./db'); // Importar la conexión a la base de datos
 require('dotenv').config();
 
 const app = express();
+const corsOptions = {
+  origin:  '*', // Permite solicitudes solo desde esta URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+};
+
+// Aplicar CORS con las opciones especificadas
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Ruta de registro
