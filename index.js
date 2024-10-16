@@ -1,5 +1,6 @@
 const express = require('express');
 const authController = require('./controllers/authController');
+const cors = require('cors');
 const verifyToken = require('./middleware/verifyToken'); // Importar el middleware
 const db = require('./db'); // Importar la conexión a la base de datos
 require('dotenv').config();
