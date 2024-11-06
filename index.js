@@ -52,7 +52,7 @@ app.get('/', async (req, res) => {
   });
   app.post('/api/shopify', (req, res) => {
     console.log('Body recibido:', req.body); // Loguea el contenido del body en la consola
-    res.status(200).send('Webhook recibido');
+    res.status(200).json(req.body); // Retorna el body recibido como respuesta en formato JSON
 });
 // Ruta protegida: solo se accede si el token es válido
 app.get('/api/protected', verifyToken, (req, res) => {
