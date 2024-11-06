@@ -23,6 +23,8 @@ app.post('/api/register', authController.register);
 // Ruta de login
 app.post('/api/login', authController.login);
 
+
+
 app.get('/api/users', authController.getAllUsers);
 
 app.get('/env', (req, res) => {
@@ -48,7 +50,10 @@ app.get('/', async (req, res) => {
       res.status(500).send('Error al conectarse a la base de datos');
     }
   });
-
+  app.post('/api/shopify', (req, res) => {
+    console.log('Body recibido:', req.body); // Loguea el contenido del body en la consola
+    res.status(200).send('Webhook recibido');
+});
 // Ruta protegida: solo se accede si el token es válido
 app.get('/api/protected', verifyToken, (req, res) => {
   res.status(200).json({ message: 'Acceso permitido', user: req.user });
