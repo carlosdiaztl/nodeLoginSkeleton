@@ -50,10 +50,29 @@ app.get('/', async (req, res) => {
       res.status(500).send('Error al conectarse a la base de datos');
     }
   });
-  app.post('/api/shopify', (req, res) => {
-    console.log('Body recibido:', req.body); // Loguea el contenido del body en la consola
-    res.status(200).json(req.body); // Retorna el body recibido como respuesta en formato JSON
+  app.post('/api/shopify', async (req, res) => {
+    try {
+        const content = req.body; // Captura el JSON recibido en el body
+
+        // Inserta el JSON en la tabla `shopify`
+        const result = await db.query(
+            'INSERT INTO shopify (content) VALUES ($1) RETURNING *',
+            [content]
+        );
+
+        console.log('JSON guardado en la base de datos:', result.rows[0]);
+
+        // Responde con el registro insertado
+        res.status(201).json({
+            message: 'Contenido guardado en la base de datos',
+            data: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Error al guardar el JSON en la base de datos:', error);
+        res.status(500).json({ error: 'Error al guardar el contenido' });
+    }
 });
+
 // Ruta protegida: solo se accede si el token es válido
 app.get('/api/protected', verifyToken, (req, res) => {
   res.status(200).json({ message: 'Acceso permitido', user: req.user });
