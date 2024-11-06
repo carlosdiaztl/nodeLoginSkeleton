@@ -72,6 +72,27 @@ app.get('/', async (req, res) => {
         res.status(500).json({ error: 'Error al guardar el contenido' });
     }
 });
+// Ruta para obtener un registro por ID
+app.get('/api/shopify/:id', async (req, res) => {
+  const { id } = req.params; // Extrae el ID de los parámetros de la URL
+
+  try {
+      // Consulta para obtener el registro por ID
+      const result = await db.query('SELECT * FROM shopify WHERE id = $1', [id]);
+
+      if (result.rows.length === 0) {
+          // Si no se encuentra el registro, responde con un mensaje de error
+          return res.status(404).json({ error: 'Registro no encontrado' });
+      }
+
+      // Retorna el registro encontrado
+      res.status(200).json(result.rows[0]);
+  } catch (error) {
+      console.error('Error al obtener el registro:', error);
+      res.status(500).json({ error: 'Error al obtener el registro' });
+  }
+});
+
 
 // Ruta protegida: solo se accede si el token es válido
 app.get('/api/protected', verifyToken, (req, res) => {
