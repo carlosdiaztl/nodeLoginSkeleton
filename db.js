@@ -1,21 +1,26 @@
-const { Pool } = require('pg');
+const Knex = require('knex');
 require('dotenv').config();
-
-const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DATABASE,
-  password: process.env.POSTGRES_PASSWORD,
-  port: process.env.POSTGRES_PORT,
-  ssl: {
-    rejectUnauthorized: false,  // Para habilitar SSL
+const knex = Knex({
+  client: 'pg',
+  connection: {
+    host: process.env.POSTGRES_HOST,
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DATABASE,
+    port: process.env.POSTGRES_PORT,
+    ssl: {
+      rejectUnauthorized: false,  // To enable SSL if required by the server
+    },
   },
 });
 
-pool.on('connect', () => {
-  console.log('Conectado a la base de datos PostgreSQL');
-});
+// Test the connection (optional)
+knex.raw('SELECT 1+1 AS result')
+  .then(() => {
+    console.log('Connected to PostgreSQL using Knex');
+  })
+  .catch((err) => {
+    console.error('Error connecting to PostgreSQL', err);
+  });
 
-module.exports = {
-  query: (text, params) => pool.query(text, params),
-};
+  module.exports = knex;
