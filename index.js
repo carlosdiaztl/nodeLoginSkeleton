@@ -150,6 +150,30 @@ app.post('/api/shopify/orders/:store', async (req, res) => {
       res.status(500).json({ error: 'Error saving the order' });
   }
 });
+app.get('/api/shopify/orders/:store', async (req, res) => {
+  const store = req.params.store;  // Store identifier from URL parameter
+  
+  try {
+      // Query the database to get all orders for the specific store
+      const orders = await db('shopify_orders').where({ store });
+
+      // If no orders are found, return a message indicating no orders exist
+      if (orders.length === 0) {
+          return res.status(404).json({ message: 'No orders found for this store.' });
+      }
+
+      // Return the orders in the response
+      res.status(200).json({
+          message: 'Orders retrieved successfully',
+          store: store,
+          orders: orders,  // Include all orders for the specific store
+      });
+  } catch (error) {
+      console.log(error);
+      
+      res.status(500).json({ error: 'Error retrieving orders' });
+  }
+});
 
 // Ruta protegida: solo se accede si el token es válido
 app.get("/api/protected", verifyToken, (req, res) => {
