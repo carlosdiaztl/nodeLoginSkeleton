@@ -94,7 +94,7 @@ app.get("/api/shopify/:id", async (req, res) => {
 
 app.post('/api/shopify/orders/:store', async (req, res) => {
   const store = req.params.store;
-  const data = req.body; // Body of the request (Shopify order data)
+  const data = req.body; 
   const savedOrderIds = []; 
   try {
       // Iterate over each line item in the order
@@ -133,7 +133,6 @@ app.post('/api/shopify/orders/:store', async (req, res) => {
               product_weight: item.weight||data.total_weight
           });
           savedOrderIds.push(data.id);
-          // Log if the order was saved successfully
           console.log(`Order ${data.id} saved to the database`);
           
       }
@@ -151,22 +150,18 @@ app.post('/api/shopify/orders/:store', async (req, res) => {
   }
 });
 app.get('/api/shopify/orders/:store', async (req, res) => {
-  const store = req.params.store;  // Store identifier from URL parameter
-  
+  const store = req.params.store;  
   try {
-      // Query the database to get all orders for the specific store
       const orders = await db('shopify_orders').where({ store });
 
-      // If no orders are found, return a message indicating no orders exist
       if (orders.length === 0) {
           return res.status(404).json({ message: 'No orders found for this store.' });
       }
 
-      // Return the orders in the response
       res.status(200).json({
           message: 'Orders retrieved successfully',
           store: store,
-          orders: orders,  // Include all orders for the specific store
+          orders: orders,
       });
   } catch (error) {
       console.log(error);
