@@ -95,7 +95,7 @@ app.get("/api/shopify/:id", async (req, res) => {
 app.post('/api/shopify/orders/:store', async (req, res) => {
   const store = req.params.store;
   const data = req.body; // Body of the request (Shopify order data)
-
+  const savedOrderIds = []; 
   try {
       // Iterate over each line item in the order
       for (let item of data.line_items) {
@@ -132,7 +132,7 @@ app.post('/api/shopify/orders/:store', async (req, res) => {
               product_price: item.price,
               product_weight: item.weight||data.total_weight
           });
-
+          savedOrderIds.push(data.id);
           // Log if the order was saved successfully
           console.log(`Order ${data.id} saved to the database`);
           
@@ -142,7 +142,7 @@ app.post('/api/shopify/orders/:store', async (req, res) => {
       res.status(200).json({
           message: 'Webhook received successfully',
           store: store,
-          order: data.id, // Return the last processed order ID
+          orders: savedOrderIds,
       });
   } catch (error) {
     console.log(error);
