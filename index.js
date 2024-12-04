@@ -39,8 +39,8 @@ app.get("/env", (req, res) => {
 });
 app.get("/", async (req, res) => {
   try {
-    // Realizar una consulta simple a la base de datos
-    const result = await db.query("SELECT NOW()"); // Consultar la hora actual en PostgreSQL
+    // Realizar una consulta simple a la base de datos utilizando Knex
+    const result = await db.raw("SELECT NOW()");
     res.send(
       `Conexión exitosa a la base de datos PostgreSQL. Hora actual: ${result.rows[0].now}`
     );
